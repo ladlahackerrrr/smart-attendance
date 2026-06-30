@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+{% block page_title %}Faculty Dashboard{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block content %}
+<div class="greeting-section mb-4">
+    <h2 class="greeting-text">{{ get_greeting() }}, {{ current_user.full_name }}</h2>
+    <p class="greeting-sub">Manage student rolls, log attendance, and review course compliance stats.</p>
+</div>
+
+<!-- KPI row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card primary">
+            <div class="stat-card-icon">
+                <i class="bi bi-journal-bookmark-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.active_classes }}</div>
+            <div class="stat-card-label">My Active Courses</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card success">
+            <div class="stat-card-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_students }}</div>
+            <div class="stat-card-label">Total Assigned Students</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card info">
+            <div class="stat-card-icon">
+                <i class="bi bi-percent"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.overall_attendance_pct }}%</div>
+            <div class="stat-card-label">My Avg Class Attendance</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8" id="classes">
+        <!-- Assigned Courses list -->
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">My Classes & Subjects</h5>
+            {% if classes %}
+            <div class="row g-3">
+                {% for c in classes %}
+                <div class="col-md-6">
+                    <div class="card p-3 border-light shadow-sm hover-lift">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-light text-primary fw-bold" style="font-size:0.7rem;">{{ c.subject.code }}</span>
+                            <small class="text-muted"><i class="bi bi-people-fill"></i> {{ c.section.students.count() }} students</small>
+                        </div>
+                        <h6 class="fw-bold mb-1">{{ c.subject.name }}</h6>
+                        <p class="text-secondary small mb-3">Section {{ c.section.name }} • Semester {{ c.section.semester.number }}</p>
+                        
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('attendance.mark') }}?section_subject_id={{ c.id }}" class="btn btn-sm btn-primary-gradient flex-grow-1 py-2">
+                                <i class="bi bi-calendar-check-fill me-1"></i> Mark
+                            </a>
+                            <a href="{{ url_for('reports.index') }}" class="btn btn-sm btn-light border flex-grow-1 py-2" style="font-size:0.8rem; font-weight:500;">
+                                <i class="bi bi-file-earmark-bar-graph"></i> Report
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-journal-x text-muted fs-1 mb-2"></i>
+                <h6 class="fw-semibold">No assigned courses</h6>
+                <p class="text-muted small">You are not currently assigned to teach any section subjects.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Quick links / Analytics stub -->
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">AI Heuristic Risk Warning</h5>
+            {% if stats.total_defaulters > 0 %}
+            <div class="insight-card danger">
+                <i class="bi bi-exclamation-octagon-fill text-danger fs-5"></i>
+                <div>
+                    <h6 class="fw-semibold mb-1" style="font-size:0.85rem;">At-Risk Students</h6>
+                    <p class="text-muted mb-0" style="font-size:0.75rem;">{{ stats.total_defaulters }} students are tracking below 75% attendance criteria in your classes.</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="insight-card success">
+                <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                <div>
+                    <h6 class="fw-semibold mb-1" style="font-size:0.85rem;">Healthy Compliance</h6>
+                    <p class="text-muted mb-0" style="font-size:0.75rem;">All students are currently in good attendance standing (&gt;75%).</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

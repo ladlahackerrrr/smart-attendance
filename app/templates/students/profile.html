@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Student Details{% endblock %}
+{% block page_title %}Student Details{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Students</a></li>
+<li class="breadcrumb-item active" aria-current="page">Profile</li>
+{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+    <h5 class="fw-semibold mb-3">Student Details & Roll Information</h5>
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="form-label" style="font-size:0.8rem; font-weight:600;">Student Name</label>
+            <input type="text" class="form-control" value="{{ student.name }}" readonly>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" style="font-size:0.8rem; font-weight:600;">Roll Number</label>
+            <input type="text" class="form-control" value="{{ student.roll_number }}" readonly>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" style="font-size:0.8rem; font-weight:600;">Registration Number</label>
+            <input type="text" class="form-control" value="{{ student.registration_number }}" readonly>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" style="font-size:0.8rem; font-weight:600;">Email Address</label>
+            <input type="text" class="form-control" value="{{ student.email or '-' }}" readonly>
+        </div>
+    </div>
+    
+    <div class="bg-light rounded-3 p-4 text-center border border-dashed">
+        <i class="bi bi-shield-check text-muted fs-2 mb-2"></i>
+        <h6 class="fw-semibold text-secondary">Individual Analytics</h6>
+        <p class="text-muted small mb-0">Detailed list of dates and individual session percentages for this student will load here in Phase 2.</p>
+    </div>
+</div>
+{% endblock %}

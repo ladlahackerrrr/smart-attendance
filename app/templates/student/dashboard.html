@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Student Portal{% endblock %}
+{% block page_title %}Student Portal{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Portal</li>
+{% endblock %}
+
+{% block content %}
+<div class="greeting-section mb-4">
+    <h2 class="greeting-text">Welcome, {{ student.name }}</h2>
+    <p class="greeting-sub">Roll No: {{ student.roll_number }} • Section: S{{ student.section.semester.number }}-{{ student.section.name }} ({{ student.department.code }})</p>
+</div>
+
+<!-- Warning Indicator banner if attendance is below 75% -->
+{% if stats.is_defaulter %}
+<div class="alert alert-danger rounded-3 border-0 shadow-sm d-flex align-items-center gap-3 mb-4 fade show" role="alert">
+    <i class="bi bi-exclamation-octagon-fill fs-4 text-danger"></i>
+    <div>
+        <h6 class="alert-heading fw-bold mb-1" style="font-size:0.9rem;">Attendance Warning Alert</h6>
+        <p class="mb-0 text-dark" style="font-size:0.8rem; opacity:0.85;">Your overall attendance of <strong>{{ stats.overall_pct }}%</strong> is below the required institution threshold of <strong>75%</strong>. Please meet your counselor or class advisor to regularize the absences.</p>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-success rounded-3 border-0 shadow-sm d-flex align-items-center gap-3 mb-4 fade show" role="alert">
+    <i class="bi bi-check-circle-fill fs-4 text-success"></i>
+    <div>
+        <h6 class="alert-heading fw-bold mb-1" style="font-size:0.9rem;">Status: compliant</h6>
+        <p class="mb-0 text-dark" style="font-size:0.8rem; opacity:0.85;">Your overall attendance of <strong>{{ stats.overall_pct }}%</strong> is in good standing. Keep it up!</p>
+    </div>
+</div>
+{% endif %}
+
+<!-- KPI Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card {% if stats.is_defaulter %}danger{% else %}success{% endif %}">
+            <div class="stat-card-icon">
+                <i class="bi bi-percent"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.overall_pct }}%</div>
+            <div class="stat-card-label">Overall Percentage</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card success">
+            <div class="stat-card-icon">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_present }}</div>
+            <div class="stat-card-label">Classes Present</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card danger">
+            <div class="stat-card-icon">
+                <i class="bi bi-x-circle-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_absent }}</div>
+            <div class="stat-card-label">Classes Absent</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card primary">
+            <div class="stat-card-icon">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_classes }}</div>
+            <div class="stat-card-label">Total Scheduled Classes</div>
+        </div>
+    </div>
+</div>
+
+<!-- Subject wise attendance breakdown -->
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">Subject-wise Attendance</h5>
+            {% if stats.subjects %}
+            <div class="table-responsive">
+                <table class="table data-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Subject Name</th>
+                            <th>Attended / Total</th>
+                            <th>Compliance Rate</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sub in stats.subjects %}
+                        <tr>
+                            <td><span class="badge bg-light text-secondary">{{ sub.subject_code }}</span></td>
+                            <td class="fw-semibold">{{ sub.subject_name }}</td>
+                            <td class="font-mono">{{ sub.present }} / {{ sub.total }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="progress-bar-custom flex-grow-1" style="width: 80px;">
+                                        <div class="fill {% if sub.percentage >= 85 %}green{% elif sub.percentage >= 75 %}yellow{% else %}red{% endif %}" style="width: {{ sub.percentage }}%;"></div>
+                                    </div>
+                                    <span class="font-mono small">{{ sub.percentage }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if sub.percentage >= 75 %}
+                                <span class="badge-status badge-present">Compliant</span>
+                                {% else %}
+                                <span class="badge-status badge-absent">Defaulter</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-book-half text-muted fs-1 mb-2"></i>
+                <h6 class="fw-semibold">No active courses found</h6>
+                <p class="text-muted small">No class assignments have been registered for your section yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Calendar/Schedules Placeholder or Quick Info card -->
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">My Reports & Support</h5>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-3" style="font-size:0.88rem;">
+                    <span><i class="bi bi-file-earmark-pdf me-2 text-danger"></i>Download Attendance Report</span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center px-0 py-3" style="font-size:0.88rem;">
+                    <span><i class="bi bi-question-circle me-2 text-primary"></i>Raise Attendance Dispute</span>
+                    <i class="bi bi-chevron-right text-muted small"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

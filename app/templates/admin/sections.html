@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Sections{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            Sections
+        </h4>
+
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#addSectionModal">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Section
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Semester</th>
+                    <th>Program</th>
+                    <th>Max Strength</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in sections %}
+                <tr>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.semester.number }}</td>
+                    <td>{{ s.semester.program.code }}</td>
+                    <td>{{ s.max_strength }}</td>
+                    <td>
+                        <form method="POST"action="{{ url_for('admin.delete_section',section_id=s.id) }}"onsubmit="return confirm('Delete this section?');">
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade"
+     id="addSectionModal"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <form method="POST"
+                  action="{{ url_for('admin.add_section') }}">
+
+                <div class="modal-header">
+                    <h5>Add Section</h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label>Semester</label>
+
+                        <select class="form-select"
+                                name="semester_id"
+                                required>
+
+                            {% for s in semesters %}
+                            <option value="{{ s.id }}">
+                                {{ s.program.code }}
+                                - Semester {{ s.number }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Section Name</label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="name"
+                               placeholder="A"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Max Strength</label>
+
+                        <input type="number"
+                               class="form-control"
+                               name="max_strength"
+                               value="60"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

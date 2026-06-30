@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <!-- Floating background blobs -->
+    <div class="auth-bg-shape"></div>
+    <div class="auth-bg-shape"></div>
+    <div class="auth-bg-shape"></div>
+
+    <div class="auth-card">
+        <div class="auth-logo">
+            <i class="bi bi-mortarboard-fill text-white"></i>
+        </div>
+        
+        <h3 class="auth-title">AttendAI</h3>
+        <p class="auth-subtitle">Smart Attendance & Analytics</p>
+
+        <!-- Flash messages custom placement inside card if desired -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show rounded-3 border-0 shadow-sm py-2 px-3" role="alert" style="font-size:0.85rem;">
+                    <span>{{ message }}</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="padding:0.75rem;"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('auth.login') }}" method="POST" class="auth-form">
+            <!-- CSRF Token -->
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="name@institution.edu" required autofocus>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label for="password" class="form-label mb-0">Password</label>
+                    <a href="#" class="text-white-50 text-decoration-none" style="font-size:0.75rem;">Forgot?</a>
+                </div>
+                <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <div class="mb-4 form-check">
+                <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                <label class="form-check-label" for="remember">Remember this device</label>
+            </div>
+
+            <button type="submit" class="btn btn-login d-flex align-items-center justify-content-center gap-2">
+                <span>Sign In</span>
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </form>
+        
+        <div class="text-center mt-4">
+            <span class="text-white-50" style="font-size:0.8rem;">Demo accounts in seeder:</span>
+            <div class="mt-1" style="font-size:0.75rem; color: rgba(255,255,255,0.8);">
+                Admin: <strong>admin@system.com</strong> (admin123)<br>
+                Teacher: <strong>teacher1@system.com</strong> (teacher123)<br>
+                Student: <strong>CS2024001@student.edu</strong> (CS2024001)
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

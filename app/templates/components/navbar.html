@@ -1,0 +1,85 @@
+<!-- Top Navigation Bar -->
+<header class="app-navbar sticky-top bg-white border-bottom px-4 py-2 d-flex align-items-center justify-content-between" style="z-index:1020;backdrop-filter:blur(12px);background:rgba(255,255,255,0.85)!important;">
+    <!-- Left: Hamburger + Page Title -->
+    <div class="d-flex align-items-center gap-3">
+        <button class="btn btn-link text-secondary p-0 d-lg-none" id="sidebarToggleBtn" aria-label="Toggle sidebar">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+        <div>
+            <h5 class="mb-0 fw-semibold text-dark">{% block page_title %}Dashboard{% endblock %}</h5>
+            <nav aria-label="breadcrumb" class="d-none d-md-block">
+                <ol class="breadcrumb mb-0" style="font-size:0.78rem;">
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Home</a></li>
+                    {% block breadcrumb_items %}{% endblock %}
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Right: Actions -->
+    <div class="d-flex align-items-center gap-2">
+        <!-- Search (Admin Only) -->
+        {% if current_user.role == 'admin' %}
+        <div class="input-group input-group-sm d-none d-xl-flex" style="width:240px;">
+            <span class="input-group-text bg-light border-end-0 border-light"><i class="bi bi-search text-muted" style="font-size:0.8rem;"></i></span>
+            <input type="text" class="form-control form-control-sm bg-light border-start-0 border-light" placeholder="Search anything..." id="globalSearch" style="font-size:0.82rem;">
+        </div>
+        {% endif %}
+
+        <!-- Theme Toggle -->
+        <button class="btn btn-light btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width:36px;height:36px;" onclick="toggleTheme()" id="themeToggleBtn" aria-label="Toggle theme">
+            <i class="bi bi-sun-fill text-warning" id="themeIcon"></i>
+        </button>
+
+        <!-- Notifications -->
+        <div class="dropdown">
+            <button class="btn btn-light btn-sm rounded-circle d-flex align-items-center justify-content-center position-relative" style="width:36px;height:36px;" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Notifications">
+                <i class="bi bi-bell"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifBadge" style="font-size:0.6rem;display:none;">
+                    0
+                </span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 p-0" style="width:360px;max-height:420px;">
+                <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                    <h6 class="mb-0 fw-semibold" style="font-size:0.9rem;">Notifications</h6>
+                    <button class="btn btn-link btn-sm text-decoration-none p-0" style="font-size:0.78rem;" id="markAllReadBtn">Mark all read</button>
+                </div>
+                <div class="overflow-auto" style="max-height:320px;" id="notificationsList">
+                    <!-- Notification Items -->
+                    <div class="text-center py-4" id="noNotifications">
+                        <i class="bi bi-bell-slash text-muted fs-2"></i>
+                        <p class="text-muted mb-0 mt-2" style="font-size:0.85rem;">No new notifications</p>
+                    </div>
+                </div>
+                <div class="px-3 py-2 border-top text-center">
+                    <a href="#" class="text-decoration-none" style="font-size:0.82rem;">View all notifications</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Dropdown -->
+        <div class="dropdown ms-1">
+            <button class="btn btn-light btn-sm rounded-pill d-flex align-items-center gap-2 px-2 py-1" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="d-flex align-items-center justify-content-center rounded-circle" style="width:30px;height:30px;background:linear-gradient(135deg,#6366f1,#06b6d4);font-size:0.7rem;font-weight:600;color:#fff;">
+                    {{ current_user.full_name[:2]|upper if current_user.full_name else 'U' }}
+                </div>
+                <span class="d-none d-md-inline fw-medium" style="font-size:0.82rem;">{{ current_user.full_name.split(' ')[0] if current_user.full_name else 'User' }}</span>
+                <i class="bi bi-chevron-down" style="font-size:0.65rem;"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 py-2" style="min-width:200px;">
+                <li class="px-3 py-2 border-bottom mb-1">
+                    <div class="fw-semibold" style="font-size:0.85rem;">{{ current_user.full_name or 'User' }}</div>
+                    <div class="text-muted" style="font-size:0.75rem;">{{ current_user.email }}</div>
+                </li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('settings.index') }}"><i class="bi bi-person"></i> My Profile</a></li>
+                <li><a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ url_for('settings.index') }}"><i class="bi bi-gear"></i> Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="{{ url_for('auth.logout') }}">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>

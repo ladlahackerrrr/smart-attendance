@@ -1,0 +1,50 @@
+<!-- Toast Notification Container -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index:1090;" id="toastContainer">
+    <!-- Template Toast (hidden, cloned by JS) -->
+    <div class="toast align-items-center border-0 rounded-3 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true" id="toastTemplate" style="display:none;" data-bs-autohide="true" data-bs-delay="5000">
+        <div class="d-flex">
+            <div class="toast-body d-flex align-items-center gap-2 fw-medium" style="font-size:0.88rem;">
+                <i class="bi toast-icon fs-5"></i>
+                <span class="toast-message"></span>
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Helper Script -->
+<script>
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const template = document.getElementById('toastTemplate');
+    const toast = template.cloneNode(true);
+
+    toast.removeAttribute('id');
+    toast.style.display = '';
+
+    const iconMap = {
+        success: 'bi-check-circle-fill',
+        error: 'bi-exclamation-triangle-fill',
+        warning: 'bi-exclamation-circle-fill',
+        info: 'bi-info-circle-fill'
+    };
+
+    const bgMap = {
+        success: 'text-bg-success',
+        error: 'text-bg-danger',
+        warning: 'text-bg-warning',
+        info: 'text-bg-primary'
+    };
+
+    toast.classList.add(bgMap[type] || bgMap.info);
+    toast.querySelector('.toast-icon').classList.add(iconMap[type] || iconMap.info);
+    toast.querySelector('.toast-message').textContent = message;
+
+    container.appendChild(toast);
+
+    const bsToast = new bootstrap.Toast(toast);
+    bsToast.show();
+
+    toast.addEventListener('hidden.bs.toast', () => toast.remove());
+}
+</script>

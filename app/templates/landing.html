@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Smart Attendance & Analytics Platform{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Landing Navigation -->
+<nav class="landing-nav" id="landingNav">
+    <a href="#" class="landing-nav-brand">
+        <div class="d-flex align-items-center gap-2">
+            <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#06b6d4);">
+                <i class="bi bi-mortarboard-fill fs-5"></i>
+            </div>
+            <span class="fw-bold text-dark fs-5">AttendAI</span>
+        </div>
+    </a>
+    <div class="landing-nav-links">
+        <a href="#features" class="landing-nav-link">Features</a>
+        <a href="#stats" class="landing-nav-link">Impact</a>
+        <a href="{{ url_for('auth.login') }}" class="landing-btn-login">Sign In</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container px-4">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <i class="bi bi-sparkles"></i>
+                        <span>AI-Powered Education Technology</span>
+                    </div>
+                    <h1 class="hero-title">Smart Attendance, <span>Smarter Insights</span></h1>
+                    <p class="hero-description">
+                        A production-ready monitoring and analytics platform that automates roll calls, flags compliance risks, detects low-attendance patterns, and streamlines academic reporting.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary-gradient px-4 py-3">Get Started Now</a>
+                        <a href="#features" class="btn btn-outline-secondary px-4 py-3 rounded-3" style="font-weight:500;">Learn More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <!-- Abstract graphical interface visual mock -->
+                <div class="position-relative ms-5">
+                    <div class="rounded-4 overflow-hidden border shadow-lg" style="width: 500px; height: 350px; background: #fff; opacity: 0.95;">
+                        <div class="bg-light px-3 py-2 border-bottom d-flex align-items-center gap-2">
+                            <span class="rounded-circle bg-danger" style="width:10px;height:10px;display:inline-block;"></span>
+                            <span class="rounded-circle bg-warning" style="width:10px;height:10px;display:inline-block;"></span>
+                            <span class="rounded-circle bg-success" style="width:10px;height:10px;display:inline-block;"></span>
+                            <small class="text-muted ms-2">dashboard.attendai.edu</small>
+                        </div>
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="skeleton-title skeleton mb-0"></div>
+                                <div class="skeleton mb-0" style="width:60px;height:24px;border-radius:20px;"></div>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-4"><div class="skeleton-card skeleton" style="height:60px;border-radius:12px;"></div></div>
+                                <div class="col-4"><div class="skeleton-card skeleton" style="height:60px;border-radius:12px;"></div></div>
+                                <div class="col-4"><div class="skeleton-card skeleton" style="height:60px;border-radius:12px;"></div></div>
+                            </div>
+                            <div class="skeleton-card skeleton" style="height:120px;border-radius:16px;"></div>
+                        </div>
+                    </div>
+                    <!-- Ambient light source blob -->
+                    <div class="position-absolute bg-primary rounded-circle filter blur" style="width: 300px; height: 300px; top: -50px; right: -50px; opacity: 0.15; z-index: -1; filter: blur(60px);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+    <div class="container px-4">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Enterprise-Grade Architecture</h2>
+            <p class="text-muted">Designed for academic administrators, faculty members, and students alike.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+                <h5 class="feature-card-title">Role-Based Access</h5>
+                <p class="feature-card-desc">Granular authorization gates system control for Administrators, Teachers, and Students with absolute security.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+                <h5 class="feature-card-title">Instant Roll Call</h5>
+                <p class="feature-card-desc">One-click toggles, bulk updates, cascading academic selections, and dynamic auto-save drafts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <h5 class="feature-card-title">Advanced Analytics</h5>
+                <p class="feature-card-desc">Interactive charts illustrating institutional trends, monthly performance, and defaulter tracking.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="bi bi-cloud-upload-fill"></i></div>
+                <h5 class="feature-card-title">Bulk Excel Engine</h5>
+                <p class="feature-card-desc">Admin tool to import student enrollment lists through spreadsheets with automated integrity validations.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="landing-footer">
+    <div class="container px-4">
+        <p class="text-muted mb-0">&copy; {{ now.year }} AttendAI. Built for Institutional Excellence.</p>
+    </div>
+</footer>
+
+<script>
+    // Navigation bar scroll behavior
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('landingNav');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+</script>
+{% endblock %}

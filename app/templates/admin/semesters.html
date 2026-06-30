@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Semesters{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-0">
+            Academic Semesters
+        </h4>
+
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#addSemesterModal">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Semester
+        </button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+
+            <thead>
+                <tr>
+                    <th>Program</th>
+                    <th>Semester</th>
+                    <th>Label</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in semesters %}
+                <tr>
+                    <td>{{ s.program.code }}</td>
+                    <td>{{ s.number }}</td>
+                    <td>{{ s.label }}</td>
+
+                    <td>
+                        <form method="POST"action="{{ url_for('admin.delete_semester',semester_id=s.id) }}"onsubmit="return confirm('Delete this semester?');">
+
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade"
+     id="addSemesterModal"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <form method="POST"
+                  action="{{ url_for('admin.add_semester') }}">
+
+                <div class="modal-header">
+                    <h5>Add Semester</h5>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label>Program</label>
+
+                        <select class="form-select"
+                                name="program_id"
+                                required>
+
+                            {% for p in programs %}
+                            <option value="{{ p.id }}">
+                                {{ p.code }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Semester Number</label>
+
+                        <input type="number"
+                               class="form-control"
+                               name="number"
+                               required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Label</label>
+
+                        <input type="text"
+                               class="form-control"
+                               name="label"
+                               placeholder="Semester 6"
+                               required>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

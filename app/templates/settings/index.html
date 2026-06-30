@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}System Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Settings</li>
+{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">Personal Profile</h5>
+            <div class="mb-3">
+                <label class="form-label" style="font-size:0.8rem; font-weight:600;">Full Name</label>
+                <input type="text" class="form-control" value="{{ current_user.full_name }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-size:0.8rem; font-weight:600;">Email Address</label>
+                <input type="email" class="form-control" value="{{ current_user.email }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" style="font-size:0.8rem; font-weight:600;">Current System Role</label>
+                <input type="text" class="form-control text-capitalize" value="{{ current_user.role }}" readonly>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">Preferences</h5>
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1 fw-semibold">Visual Theme Mode</h6>
+                    <small class="text-muted">Choose your preferred visual presentation.</small>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm px-3 rounded-3" onclick="toggleTheme()">
+                    <i class="bi bi-circle-half me-1"></i> Toggle Mode
+                </button>
+            </div>
+            <hr class="my-3">
+            <h6 class="mb-1 fw-semibold">Support Contact</h6>
+            <p class="text-muted small">Please contact institutional system administration to request email changes or password resets.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

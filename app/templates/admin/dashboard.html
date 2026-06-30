@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}System Dashboard{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block content %}
+<div class="greeting-section mb-4">
+    <h2 class="greeting-text">Hello, {{ current_user.full_name }}</h2>
+    <p class="greeting-sub">Here is what's happening at your institution today.</p>
+</div>
+
+<!-- KPI Cards -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card success">
+            <div class="stat-card-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_students }}</div>
+            <div class="stat-card-label">Total Students</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card info">
+            <div class="stat-card-icon">
+                <i class="bi bi-person-workspace"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_teachers }}</div>
+            <div class="stat-card-label">Total Faculty</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card primary">
+            <div class="stat-card-icon">
+                <i class="bi bi-percent"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.overall_attendance_pct }}%</div>
+            <div class="stat-card-label">Overall Attendance</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card danger">
+            <div class="stat-card-icon">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+            <div class="stat-card-value">{{ stats.total_defaulters }}</div>
+            <div class="stat-card-label">Defaulters (&lt;75%)</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Main Dashboard Charts & Recent Actions (Skeletons for Phase 1) -->
+    <div class="col-lg-8">
+        <div class="card p-4 mb-4">
+            <h5 class="fw-semibold mb-3">Attendance Overview & Trends</h5>
+            <!-- ApexCharts container skeleton -->
+            <div class="bg-light rounded-3 p-5 text-center border border-dashed" style="min-height:300px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <i class="bi bi-bar-chart-line-fill text-muted fs-1 mb-2"></i>
+                <h6 class="fw-semibold text-secondary">Interactive Trend Analytics</h6>
+                <p class="text-muted small max-width-300">Once active class attendance records are logged, this container will render line and column trend projections.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <!-- Quick Actions Panel -->
+        <div class="card p-4 mb-4">
+            <h5 class="fw-semibold mb-3">Quick Actions</h5>
+            <div class="quick-actions">
+                <a href="{{ url_for('attendance.mark') }}" class="quick-action-btn">
+                    <i class="bi bi-calendar-plus-fill"></i>
+                    <span style="font-size:0.8rem;font-weight:600;">Mark Attendance</span>
+                </a>
+                <a href="{{ url_for('admin.bulk_import') }}" class="quick-action-btn">
+                    <i class="bi bi-cloud-upload-fill"></i>
+                    <span style="font-size:0.8rem;font-weight:600;">Import Excel</span>
+                </a>
+                <a href="{{ url_for('reports.index') }}" class="quick-action-btn">
+                    <i class="bi bi-file-earmark-bar-graph"></i>
+                    <span style="font-size:0.8rem;font-weight:600;">Run Reports</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- AI Insights & Heuristics Panel -->
+        <div class="card p-4">
+            <h5 class="fw-semibold mb-3">AI Heuristic Alerts</h5>
+            
+            <div class="insight-card danger">
+                <i class="bi bi-exclamation-octagon-fill text-danger fs-5"></i>
+                <div>
+                    <h6 class="fw-semibold mb-1" style="font-size:0.85rem;">High Default Risk</h6>
+                    <p class="text-muted mb-0" style="font-size:0.75rem;">{{ stats.total_defaulters }} students are currently below the 75% attendance criteria threshold.</p>
+                </div>
+            </div>
+
+            <div class="insight-card info">
+                <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+                <div>
+                    <h6 class="fw-semibold mb-1" style="font-size:0.85rem;">Class Activity</h6>
+                    <p class="text-muted mb-0" style="font-size:0.75rem;">Currently running {{ stats.active_classes }} subject courses assigned to active schedules.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

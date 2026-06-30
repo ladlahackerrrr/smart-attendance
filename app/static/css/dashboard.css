@@ -1,0 +1,142 @@
+/* ============================================================
+   SMART ATTENDANCE SYSTEM — Dashboard CSS
+   Includes: Grids, Chart containers, Activity feeds, Insights panel
+   ============================================================ */
+
+/* ── 1. GRIDS ── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 992px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── 2. CHART CARDS & CONTAINERS ── */
+.chart-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.chart-container {
+  min-height: 320px;
+  position: relative;
+  width: 100%;
+}
+
+/* ── 3. QUICK ACTION BUTTONS ── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.quick-action-btn {
+  padding: 16px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.quick-action-btn:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  color: var(--primary);
+}
+
+.quick-action-btn i {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+/* ── 4. INSIGHTS / WARNING PANEL ── */
+.insight-card {
+  border-left: 4px solid var(--primary);
+  padding: 16px 20px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.insight-card.warning {
+  border-left-color: var(--warning);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.insight-card.danger {
+  border-left-color: var(--danger);
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.insight-card.info {
+  border-left-color: var(--primary);
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.insight-card.success {
+  border-left-color: var(--success);
+  background: rgba(16, 185, 129, 0.04);
+}
+
+/* ── 5. GREETING SECTION ── */
+.greeting-section {
+  margin-bottom: 32px;
+}
+
+.greeting-text {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.greeting-sub {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}

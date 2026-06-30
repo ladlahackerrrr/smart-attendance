@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Mark Attendance{% endblock %}
+{% block page_title %}Mark Attendance{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Attendance</a></li>
+<li class="breadcrumb-item active" aria-current="page">Mark</li>
+{% endblock %}
+
+{% block content %}
+<!-- Selection filters card -->
+<div class="card p-4 mb-4">
+    <h5 class="fw-semibold mb-3">Class Selection</h5>
+    <form id="attendanceSelectForm">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="deptSelect" class="form-label font-sans" style="font-size:0.8rem; font-weight:600;">Department</label>
+                <select class="form-select" id="deptSelect" required>
+                    <option value="">Choose department...</option>
+                    {% for d in departments %}
+                    <option value="{{ d.id }}">{{ d.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="programSelect" class="form-label" style="font-size:0.8rem; font-weight:600;">Program</label>
+                <select class="form-select" id="programSelect" disabled required>
+                    <option value="">Choose program...</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="semSelect" class="form-label" style="font-size:0.8rem; font-weight:600;">Semester</label>
+                <select class="form-select" id="semSelect" disabled required>
+                    <option value="">Choose semester...</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="sectionSelect" class="form-label" style="font-size:0.8rem; font-weight:600;">Section</label>
+                <select class="form-select" id="sectionSelect" disabled required>
+                    <option value="">Choose section...</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="subjectSelect" class="form-label" style="font-size:0.8rem; font-weight:600;">Subject / Course</label>
+                <select class="form-select" id="subjectSelect" disabled required>
+                    <option value="">Choose subject...</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="dateInput" class="form-label" style="font-size:0.8rem; font-weight:600;">Date</label>
+                <input type="date" class="form-control" id="dateInput" value="{{ now.strftime('%Y-%m-%d') }}" required>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+            <button type="submit" class="btn btn-primary-gradient px-4 py-2" id="loadStudentsBtn">
+                <i class="bi bi-people-fill me-1"></i> Load Student Roll
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Student Roll section (Loads dynamically via AJAX) -->
+<div class="card p-4 d-none" id="studentRollCard">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h5 class="fw-semibold mb-1" id="rollClassName">Student Roll call</h5>
+            <small class="text-muted" id="attendanceCounters">0 Present • 0 Absent • 0 Total</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-success" id="markAllPresentBtn"{% if current_user.role == 'admin' %}disabled{% endif %}></button>>
+                <i class="bi bi-check-all"></i> All Present
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger" id="markAllAbsentBtn"{% if current_user.role == 'admin' %}disabled{% endif %}>
+                <i class="bi bi-x"></i> All Absent
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Student grid container -->
+    <div class="row g-3 mb-4" id="studentGrid">
+        <!-- Student cards will be loaded here by javascript -->
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 border-top pt-3">
+        <button type="button" class="btn btn-light border px-4" id="cancelMarkingBtn">Cancel</button>
+        {% if current_user.role == 'teacher' %}
+        <button type="button" class="btn btn-primary-gradient px-4" id="saveAttendanceBtn">
+            <i class="bi bi-cloud-check-fill me-1"></i> Save Attendance
+        </button>
+        {% else %}
+
+        <div class="alert alert-info mb-0 py-2">
+            <i class="bi bi-eye-fill me-1"></i>
+            Admin can only view attendance.
+        </div>
+
+        {% endif %}
+    </div>
+</div>
+
+<!-- Empty state selection notice -->
+<div class="card p-5 text-center" id="selectPromptState">
+    <i class="bi bi-calendar-check text-muted mb-2" style="font-size: 3rem;"></i>
+    <h6 class="fw-semibold text-secondary">Select Academic Details</h6>
+    <p class="text-muted small mb-0">Please fill out the filters above to load the student registry for marking.</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/attendance.js') }}"></script>
+{% endblock %}

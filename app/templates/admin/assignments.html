@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Teaching Assignments{% endblock %}
+{% block page_title %}Teaching Assignments{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Admin</a></li>
+<li class="breadcrumb-item active" aria-current="page">Assignments</li>
+{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h5 class="fw-semibold mb-0">Teaching Assignments</h5>
+        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addAssignmentModal"><i class="bi bi-plus-lg me-1"></i> Add Assignment</button>
+    </div>
+
+    {% if assignments %}
+    <div class="table-responsive">
+        <table class="table data-table align-middle">
+            <thead>
+                <tr>
+                    <th>Section</th>
+                    <th>Semester</th>
+                    <th>Program</th>
+                    <th>Subject Course</th>
+                    <th>Assigned Faculty</th>
+                    <th width="100">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in assignments %}
+                <tr>
+                    <td class="fw-semibold">Section {{ a.section.name }}</td>
+                    <td>Semester {{ a.section.semester.number }}</td>
+                    <td>{{ a.section.semester.program.code }}</td>
+                    <td>{{ a.subject.name }} ({{ a.subject.code }})</td>
+                    <td>{{ a.teacher.full_name }}</td>
+                    <td>
+                        <form action="{{ url_for('admin.delete_assignment', assignment_id=a.id)}}"
+                              method="POST"
+                              onsubmit="return confirm('Delete this assignment?');">
+                            <button type="submit"
+                                class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-journal-bookmark-fill text-muted fs-1 mb-2"></i>
+        <h6 class="fw-semibold">No assignments found</h6>
+        <p class="text-muted small">Course assignments will load here once seeded.</p>
+    </div>
+    {% endif %}
+</div>
+<!-- Add Assignment Modal -->
+<div class="modal fade"
+     id="addAssignmentModal"
+     tabindex="-1">
+
+    <div class="modal-dialog">
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Assign Class to Teacher
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('admin.add_assignment') }}">
+                <input type="hidden"
+                        name="csrf_token"
+                        value="{{ csrf_token() }}">
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Teacher
+                        </label>
+
+                        <select class="form-select"
+                                name="teacher_id"
+                                required>
+
+                            <option value="">
+                                Select Teacher
+                            </option>
+
+                            {% for t in teachers %}
+                            <option value="{{ t.id }}">
+                                {{ t.full_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Subject
+                        </label>
+
+                        <select class="form-select"
+                                name="subject_id"
+                                required>
+
+                            <option value="">
+                                Select Subject
+                            </option>
+
+                            {% for s in subjects %}
+                            <option value="{{ s.id }}">
+                                {{ s.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select class="form-select"
+                                name="section_id"
+                                required>
+
+                            <option value="">
+                                Select Section
+                            </option>
+
+                            {% for s in sections %}
+                            <option value="{{ s.id }}">
+                                Semester {{ s.semester.number }}
+                                - Section {{ s.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Assign
+                    </button>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

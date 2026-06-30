@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Internal Server Error{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="mb-4">
+                <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 6rem;"></i>
+            </div>
+            <h1 class="display-4 fw-bold">500</h1>
+            <h3 class="mb-3 text-secondary">Server Error</h3>
+            <p class="text-muted mb-4">
+                Something went wrong on our end. We are working to resolve the issue as soon as possible.
+            </p>
+            <a href="/" class="btn btn-primary-gradient px-4">Go to Homepage</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

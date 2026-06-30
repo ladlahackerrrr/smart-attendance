@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}My Attendance{% endblock %}
+{% block page_title %}My Attendance{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Portal</a></li>
+<li class="breadcrumb-item active" aria-current="page">Attendance</li>
+{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+    <h5 class="fw-semibold mb-3">Attendance Logs</h5>
+    <p class="text-secondary small mb-4">Review your date-wise attendance records for all subject courses.</p>
+    
+    <div class="bg-light rounded-3 p-5 text-center border border-dashed mb-4">
+        <i class="bi bi-calendar-check-fill text-muted fs-1 mb-2"></i>
+        <h6 class="fw-semibold text-secondary">My Detailed Attendance Register</h6>
+        <p class="text-muted small">A tabular breakdown of every class conducted and your attendance status (Present/Absent) will render here in Phase 2.</p>
+    </div>
+</div>
+{% endblock %}

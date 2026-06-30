@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}Students Registry{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm border-0 p-4 rounded-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h4 class="fw-bold mb-0">
+            Students Registry
+        </h4>
+
+        {% if current_user.role == 'admin' %}
+        <form method="POST"action="{{ url_for('students.delete_all_students') }}"onsubmit="return confirm('Are you sure? This will delete ALL students!')">
+            <button class="btn btn-danger me-2">
+                <i class="bi bi-trash3-fill me-1"></i>
+                Delete All
+            </button>
+        </form>
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#addStudentModal">
+
+            <i class="bi bi-plus-lg me-1"></i>
+            Add Student
+        </button>
+        {% endif %}
+    </div>
+      
+
+    <form method="GET" class="row g-3 mb-4">
+
+        <div class="col-md-4">
+            <label class="form-label fw-semibold">
+                Semester
+            </label>
+            <select class="form-select"name="semester">
+                <option value="">
+                    All Semesters
+                </option>
+
+                <option value="3"
+                    {% if selected_semester == 3 %}
+                    selected
+                    {% endif %}>
+                    Semester 2
+                </option>
+                <option value="2"
+                    {% if selected_semester == 2 %}
+                    selected
+                    {% endif %}>
+                    Semester 4
+                </option>
+
+                <option value="1"
+                    {% if selected_semester == 1 %}
+                    selected
+                    {% endif %}>
+                    Semester 6
+                </option>
+
+            </select>
+        </div>
+
+    <div class="col-md-4">
+        <label class="form-label fw-semibold">
+            Section
+        </label>
+
+        <select class="form-select"
+                name="section">
+
+            <option value="">
+                All Sections
+            </option>
+
+            <option value="A"
+                {% if selected_section == 'A' %}
+                selected
+                {% endif %}>
+                Section A
+            </option>
+
+            <option value="B"
+                {% if selected_section == 'B' %}
+                selected
+                {% endif %}>
+                Section B
+            </option>
+
+            <option value="C"
+                {% if selected_section == 'C' %}
+                selected
+                {% endif %}>
+                Section C
+            </option>
+
+        </select>
+    </div>
+
+    <div class="col-md-4 d-flex align-items-end">
+        <button class="btn btn-primary w-100">
+            <i class="bi bi-funnel-fill me-1"></i>
+            Apply Filter
+        </button>
+    </div>
+
+</form>
+
+
+    {% if students %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+
+            <thead>
+                <tr>
+                    <th>Roll No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Section</th>
+                    <th>Attendance</th>
+
+                    {% if current_user.role == 'admin' %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td>{{ s.roll_number }}</td>
+                    <td>{{ s.name }}</td>
+                    <td>{{ s.email or '-' }}</td>
+                    <td>{{ s.department.code }}</td>
+                    <td>Semester {{ s.section.semester.number }}
+                        - Section {{ s.section.name }}</td>
+
+                    <td>
+                        {{ s.get_attendance_percentage() }}%
+                    </td>
+
+                    {% if current_user.role == 'admin' %}
+                    <td>
+                        <form method="POST"
+                              action="{{ url_for('students.delete_student', student_id=s.id) }}"
+                              onsubmit="return confirm('Delete student?')">
+
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+</div>
+
+<!-- Pagination -->
+{% if pagination.pages > 1 %}
+<div class="d-flex justify-content-center mt-4">
+    <nav>
+        <ul class="pagination">
+
+            {% if pagination.has_prev %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="{{ url_for('students.list',
+                   page=pagination.prev_num) }}">
+                    Previous
+                </a>
+            </li>
+            {% endif %}
+
+            {% for page_num in pagination.iter_pages() %}
+                {% if page_num %}
+                <li class="page-item
+                    {% if page_num == pagination.page %}
+                    active
+                    {% endif %}">
+                    <a class="page-link"
+                       href="{{ url_for('students.list',
+                       page=page_num) }}">
+                        {{ page_num }}
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if pagination.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="{{ url_for('students.list',
+                   page=pagination.next_num) }}">
+                    Next
+                </a>
+            </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+</div>
+{% endif %}
+
+{% endif %}
+</div>
+
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content rounded-4 border-0">
+
+            <div class="modal-header">
+                <h5>Add Student</h5>
+
+                <button class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('students.add_student') }}">
+
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label>Full Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="name"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Email</label>
+                            <input type="email"
+                                   class="form-control"
+                                   name="email"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Phone</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="phone">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Password</label>
+                            <input type="password"
+                                   class="form-control"
+                                   name="password"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Roll Number</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="roll_number"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Registration Number</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="registration_number"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Department</label>
+
+                            <select class="form-select"
+                                    name="department_id"
+                                    required>
+
+                                {% for d in departments %}
+                                <option value="{{ d.id }}">
+                                    {{ d.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Section</label>
+
+                            <select class="form-select"
+                                    name="section_id"
+                                    required>
+
+                                {% for s in sections %}
+                                <option value="{{ s.id }}">
+                                    {{ s.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button class="btn btn-primary">
+                        Save Student
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

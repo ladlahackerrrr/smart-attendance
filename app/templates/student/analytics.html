@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}My Analytics{% endblock %}
+{% block page_title %}My Analytics{% endblock %}
+
+{% block breadcrumb_items %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Portal</a></li>
+<li class="breadcrumb-item active" aria-current="page">Analytics</li>
+{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+    <h5 class="fw-semibold mb-3">My Performance Charts</h5>
+    <p class="text-secondary small mb-4">View graphical trends of your class compliance performance over time.</p>
+    
+    <div class="bg-light rounded-3 p-5 text-center border border-dashed mb-4">
+        <i class="bi bi-graph-up-arrow text-muted fs-1 mb-2"></i>
+        <h6 class="fw-semibold text-secondary">My Trends Visualizer</h6>
+        <p class="text-muted small">Personal trend lines and bar comparisons will render here using ApexCharts in Phase 2.</p>
+    </div>
+</div>
+{% endblock %}

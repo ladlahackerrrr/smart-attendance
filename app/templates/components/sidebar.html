@@ -1,0 +1,135 @@
+<!-- Sidebar Navigation -->
+<aside class="app-sidebar" id="appSidebar">
+    <!-- Brand -->
+    <div class="sidebar-brand d-flex align-items-center gap-2 px-3 py-4">
+        <div class="brand-icon d-flex align-items-center justify-content-center rounded-3" style="width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#06b6d4);">
+            <i class="bi bi-mortarboard-fill text-white fs-5"></i>
+        </div>
+        <div class="brand-text">
+            <h6 class="mb-0 text-white fw-bold">AttendAI</h6>
+            <small class="text-white-50" style="font-size:0.7rem;">Smart Attendance</small>
+        </div>
+        <button class="btn btn-link text-white-50 ms-auto d-lg-none p-0" id="sidebarCloseBtn" aria-label="Close sidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav flex-grow-1 px-2 py-2">
+        <div class="nav-section">
+            <span class="nav-section-label text-uppercase text-white-50 px-3 mb-2 d-block" style="font-size:0.65rem;letter-spacing:0.08em;">Main Menu</span>
+
+            {% if current_user.role == 'admin' %}
+            <!-- Admin Navigation -->
+            <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.dashboard' }}">
+                <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('admin.departments') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.departments' }}">
+                <i class="bi bi-building"></i><span>Departments</span>
+            </a>
+            <a href="{{ url_for('admin.programs') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.programs' }}">
+                <i class="bi bi-journal-bookmark-fill"></i><span>Programs</span>
+            </a>
+            
+            <a href="{{ url_for('admin.semesters') }}"
+                class="sidebar-link {{ 'active' if request.endpoint == 'admin.semesters' }}">
+                <i class="bi bi-calendar3"></i>
+                <span>Semesters</span>
+            </a>     
+            <a href="{{ url_for('admin.sections') }}"
+                class="sidebar-link {{ 'active' if request.endpoint == 'admin.sections' }}">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <span>Sections</span>
+            </a>
+            <a href="{{ url_for('admin.subjects') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.subjects' }}">
+                <i class="bi bi-book-half"></i><span>Subjects</span>
+            </a>
+            <a href="{{ url_for('admin.assignments') }}"class="sidebar-link {{ 'active' if request.endpoint == 'admin.assignments' }}">
+                <i class="bi bi-diagram-3-fill"></i>
+                <span>Assignments</span>
+            </a>
+            <a href="{{ url_for('admin.teachers') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.teachers' }}">
+                <i class="bi bi-person-workspace"></i><span>Teachers</span>
+            </a>
+
+        
+            </a>
+            <a href="{{ url_for('analytics.dashboard') }}" class="sidebar-link {{ 'active' if request.endpoint == 'analytics.dashboard' }}">
+                <i class="bi bi-graph-up-arrow"></i><span>Analytics</span>
+            </a>
+            <a href="{{ url_for('reports.index') }}" class="sidebar-link {{ 'active' if request.endpoint == 'reports.index' }}">
+                <i class="bi bi-file-earmark-bar-graph"></i><span>Reports</span>
+            </a>
+
+            <span class="nav-section-label text-uppercase text-white-50 px-3 mt-3 mb-2 d-block" style="font-size:0.65rem;letter-spacing:0.08em;">System</span>
+
+            <a href="{{ url_for('admin.bulk_import') }}" class="sidebar-link {{ 'active' if request.endpoint == 'admin.bulk_import' }}">
+                <i class="bi bi-cloud-upload-fill"></i><span>Bulk Import</span>
+            </a>
+            <a href="{{ url_for('settings.index') }}" class="sidebar-link {{ 'active' if request.endpoint == 'settings.index' }}">
+                <i class="bi bi-gear-fill"></i><span>Settings</span>
+            </a>
+
+            {% elif current_user.role == 'teacher' %}
+            <!-- Teacher Navigation -->
+            <a href="{{ url_for('teacher.dashboard') }}" class="sidebar-link {{ 'active' if request.endpoint == 'teacher.dashboard' }}">
+                <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('teacher.classes') }}" class="sidebar-link {{ 'active' if request.endpoint == 'teacher.classes' }}">
+                <i class="bi bi-journal-bookmark-fill"></i><span>My Classes</span>
+            </a>
+            <a href="{{ url_for('attendance.mark') }}" class="sidebar-link {{ 'active' if request.endpoint == 'attendance.mark' }}">
+                <i class="bi bi-calendar-check-fill"></i><span>Mark Attendance</span>
+            </a>
+            <a href="{{ url_for('students.list') }}" class="sidebar-link {{ 'active' if request.endpoint == 'students.list' }}">
+                <i class="bi bi-people-fill"></i><span>Students</span>
+            </a>
+            <a href="{{ url_for('analytics.dashboard') }}" class="sidebar-link {{ 'active' if request.endpoint == 'analytics.dashboard' }}">
+                <i class="bi bi-graph-up-arrow"></i><span>Analytics</span>
+            </a>
+            <a href="{{ url_for('reports.index') }}" class="sidebar-link {{ 'active' if request.endpoint == 'reports.index' }}">
+                <i class="bi bi-file-earmark-bar-graph"></i><span>Reports</span>
+            </a>
+
+            <span class="nav-section-label text-uppercase text-white-50 px-3 mt-3 mb-2 d-block" style="font-size:0.65rem;letter-spacing:0.08em;">System</span>
+
+            <a href="{{ url_for('settings.index') }}" class="sidebar-link {{ 'active' if request.endpoint == 'settings.index' }}">
+                <i class="bi bi-gear-fill"></i><span>Settings</span>
+            </a>
+
+            {% elif current_user.role == 'student' %}
+            <!-- Student Navigation -->
+            <a href="{{ url_for('student_bp.dashboard') }}" class="sidebar-link {{ 'active' if request.endpoint == 'student_bp.dashboard' }}">
+                <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+            </a>
+            <a href="{{ url_for('student_bp.attendance') }}" class="sidebar-link {{ 'active' if request.endpoint == 'student_bp.attendance' }}">
+                <i class="bi bi-calendar-check-fill"></i><span>My Attendance</span>
+            </a>
+            <a href="{{ url_for('student_bp.analytics') }}" class="sidebar-link {{ 'active' if request.endpoint == 'student_bp.analytics' }}">
+                <i class="bi bi-graph-up-arrow"></i><span>Analytics</span>
+            </a>
+
+            <span class="nav-section-label text-uppercase text-white-50 px-3 mt-3 mb-2 d-block" style="font-size:0.65rem;letter-spacing:0.08em;">System</span>
+
+            <a href="{{ url_for('settings.index') }}" class="sidebar-link {{ 'active' if request.endpoint == 'settings.index' }}">
+                <i class="bi bi-gear-fill"></i><span>Settings</span>
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- User Info -->
+    <div class="sidebar-user px-3 py-3 border-top border-white border-opacity-10">
+        <div class="d-flex align-items-center gap-2">
+            <div class="user-avatar d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#06b6d4);font-size:0.8rem;font-weight:600;color:#fff;">
+                {{ current_user.full_name[:2]|upper if current_user.full_name else 'U' }}
+            </div>
+            <div class="overflow-hidden">
+                <div class="text-white text-truncate fw-medium" style="font-size:0.85rem;">{{ current_user.full_name or 'User' }}</div>
+                <span class="badge rounded-pill {% if current_user.role == 'admin' %}bg-primary{% elif current_user.role == 'teacher' %}bg-info{% else %}bg-success{% endif %}" style="font-size:0.6rem;">
+                    {{ current_user.role|capitalize }}
+                </span>
+            </div>
+        </div>
+    </div>
+</aside>
