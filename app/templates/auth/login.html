@@ -59,14 +59,22 @@
                 <span>Sign In</span>
                 <i class="bi bi-arrow-right"></i>
             </button>
+            <button
+                type="button"
+                class="btn btn-link w-100 mt-3 text-decoration-none text-white-50"
+                data-bs-toggle="modal"
+                data-bs-target="#demoCredentialsModal">
+                <i class="bi bi-person-badge me-1"></i>
+                Demo Credentials
+            </button>
         </form>
-        
-        <div class="text-center mt-4">
-            <span class="text-white-50" style="font-size:0.8rem;">Demo accounts in seeder:</span>
-            <div class="mt-1" style="font-size:0.75rem; color: rgba(255,255,255,0.8);">
-                Admin: <strong>admin@system.com</strong> (admin123)<br>
-                Teacher: <strong>teacher1@system.com</strong> (teacher123)<br>
-                Student: <strong>CS2024001@student.edu</strong> (CS2024001)
+        <div class="modal fade"
+            id="demoCredentialsModal"
+            tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4 border-0 shadow-lg">
+                    <!-- Rest of the modal code goes here -->
+                </div>
             </div>
         </div>
     </div>
